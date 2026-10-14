@@ -2,6 +2,12 @@
 
 A mobile-friendly AI study chatbot for Maharashtra HSC Class 12 Science. It can help with Physics, Chemistry, Mathematics, Biology, English, revision, and questions students provide. It replies in English, Hindi, or Marathi.
 
+## Sample question paper
+
+[Open the Maharashtra HSC Class 12 Physics practice sample](papers/maharashtra-hsc-class12-physics-sample.md).
+
+This is an AI-generated practice sample, not an official previous-year board paper.
+
 ## Deploy it with Vercel
 
 This project needs server functions, so deploy it with Vercel rather than GitHub Pages.
