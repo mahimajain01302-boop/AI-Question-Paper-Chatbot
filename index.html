@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HSC Study Buddy — Maharashtra Board</title>
+<style>
+:root{--navy:#15264b;--blue:#4169e1;--sky:#eff4ff;--ink:#202b42;--muted:#64718a;--line:#e4e9f2;--green:#e5f7ed}
+*{box-sizing:border-box}body{margin:0;background:#f6f8fc;color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+.app{max-width:980px;margin:30px auto;padding:0 18px}.top{display:flex;align-items:center;gap:14px;margin-bottom:18px}.logo{background:var(--navy);color:white;width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:22px}.top h1{font-size:21px;margin:0;color:var(--navy)}.top p{margin:2px 0;color:var(--muted);font-size:13px}
+.layout{display:grid;grid-template-columns:250px 1fr;gap:16px}.card{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 24px #1c32600b}.side{padding:20px;height:max-content}.side h2{font-size:14px;margin:0 0 12px}.subjects{display:grid;gap:8px}.subject{border:1px solid var(--line);background:white;border-radius:10px;padding:9px 11px;text-align:left;color:var(--ink);cursor:pointer}.subject:hover,.subject.active{border-color:var(--blue);background:var(--sky);color:var(--blue)}.tip{font-size:12px;color:var(--muted);margin-top:18px;padding-top:15px;border-top:1px solid var(--line)}
+.chat{display:flex;flex-direction:column;min-height:620px;overflow:hidden}.chathead{padding:15px 19px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}.dot{width:9px;height:9px;border-radius:50%;background:#35b779}.chathead strong{font-size:14px}.chathead span{font-size:12px;color:var(--muted);margin-left:auto}.messages{padding:22px;flex:1;overflow:auto;max-height:510px}.msg{max-width:85%;padding:12px 15px;border-radius:15px;margin:0 0 13px;white-space:pre-wrap}.bot{background:#f1f4fa;border-top-left-radius:4px}.user{background:var(--blue);color:white;margin-left:auto;border-top-right-radius:4px}.suggestions{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 14px}.suggestions button{border:1px solid #d9e2fc;background:white;color:#3858b6;border-radius:20px;padding:7px 11px;cursor:pointer;font-size:12px}.inputrow{display:flex;gap:10px;padding:15px 18px;border-top:1px solid var(--line)}input{flex:1;min-width:0;border:1px solid #d6deeb;border-radius:12px;padding:12px 14px;font:inherit;outline:none}input:focus{border-color:var(--blue)}.send{border:0;border-radius:12px;background:var(--blue);color:white;font-weight:600;padding:0 19px;cursor:pointer}.foot{text-align:center;color:var(--muted);font-size:11px;margin:12px}
+@media(max-width:700px){.app{margin:16px auto}.layout{grid-template-columns:1fr}.side{padding:15px}.subjects{grid-template-columns:repeat(2,1fr)}.chat{min-height:540px}.messages{max-height:410px}.msg{max-width:94%}}
+</style>
+</head>
+<body><main class="app">
+<header class="top"><div class="logo">📘</div><div><h1>HSC Study Buddy</h1><p>Maharashtra Board · Class 12 Science</p></div></header>
+<div class="layout"><aside class="card side"><h2>Choose a subject</h2><div class="subjects" id="subjects"></div><p class="tip">Ask about revision, important chapters, paper patterns, or a question from your paper. For exact solutions, paste the full question.</p></aside>
+<section class="card chat"><div class="chathead"><i class="dot"></i><strong>Study assistant</strong><span>Ready to help</span></div><div class="messages" id="messages" aria-live="polite"></div><div class="suggestions" id="suggestions"></div><form class="inputrow" id="form"><input id="question" autocomplete="off" placeholder="Type your question…" aria-label="Your question"><button class="send">Send</button></form></section></div>
+<p class="foot">Study support for practice and revision. Check the latest syllabus and official paper instructions with your college.</p>
+</main>
+<script>
+const subjects=["All subjects","Physics","Chemistry","Mathematics","Biology","English"];
+let selected="All subjects";
+const answers={
+"Physics":"For HSC Physics, start with Electrostatics, Current Electricity, Magnetic Fields, EMI and AC, Wave Optics, and Semiconductor Devices. Practise numericals with units and show each step. Tell me the chapter or paste a past-paper question for help.",
+"Chemistry":"For HSC Chemistry, revise Physical Chemistry numericals and key ideas in Solutions, Electrochemistry, Chemical Kinetics, and Thermodynamics. For Organic Chemistry, make a reaction map and practise conversions. Which chapter or question are you working on?",
+"Mathematics":"For HSC Mathematics, practise one problem from each exercise and keep a formula sheet. Prioritise calculus, vectors, 3D geometry, probability, and algebra as per your current syllabus. Send a question and I’ll walk through the method.",
+"Biology":"For HSC Biology, revise diagrams and labelled processes along with definitions. Focus on reproduction, genetics and evolution, biotechnology, and ecology. Tell me a chapter and I can make a quick revision quiz.",
+"English":"For HSC English, practise reading comprehension, writing formats, grammar, and textbook answers. For writing tasks, follow the format and word limit given by your teacher or current paper instructions."
+};
+const msgs=document.querySelector("#messages"), input=document.querySelector("#question");
+function add(text,who="bot"){let d=document.createElement("div");d.className="msg "+who;d.textContent=text;msgs.append(d);msgs.scrollTop=msgs.scrollHeight}
+function showSuggestions(items){let box=document.querySelector("#suggestions");box.replaceChildren();items.forEach(t=>{let b=document.createElement("button");b.textContent=t;b.onclick=()=>{input.value=t;send(t)};box.append(b)})}
+function choose(subject){selected=subject;document.querySelectorAll(".subject").forEach(b=>b.classList.toggle("active",b.textContent===subject));showSuggestions(["Important chapters","Make a revision plan","Explain paper pattern"])}
+function reply(q){let s=selected==="All subjects"?Object.keys(answers).find(k=>q.toLowerCase().includes(k.toLowerCase())):selected;
+if(/hello|hi|hey|namaste|bhai/i.test(q))return "Hi! I’m your Maharashtra HSC Class 12 Science study buddy. Choose a subject or ask me about revision, paper patterns, or a question.";
+if(/paper pattern|pattern|marks|blueprint/i.test(q))return "Paper patterns and marks can change by subject and exam year. Check the latest Maharashtra State Board instructions or ask your college. Tell me your subject and I can help you plan practice across its chapters.";
+if(/revision plan|study plan|timetable|schedule/i.test(q))return "Try this simple weekly routine: revise one chapter, solve its textbook examples, attempt related previous-paper questions, then review mistakes. Rotate Physics, Chemistry, Maths/Biology, and English. Tell me your exam date and daily study time for a tailored plan.";
+if(/important|chapters|topics|question/i.test(q)&&s&&answers[s])return answers[s];
+if(s&&answers[s])return answers[s]+" If you paste the exact question, I can help solve it step by step.";
+return "I can help with Physics, Chemistry, Mathematics, Biology, and English. Choose a subject, or ask for important chapters, a revision plan, or help with a question.";
+}
+function send(q){q=(q||input.value).trim();if(!q)return;add(q,"user");input.value="";setTimeout(()=>add(reply(q)),180)}
+document.querySelector("#form").addEventListener("submit",e=>{e.preventDefault();send()});
+const box=document.querySelector("#subjects");subjects.forEach((s,i)=>{let b=document.createElement("button");b.className="subject"+(i===0?" active":"");b.textContent=s;b.onclick=()=>choose(s);box.append(b)});
+add("Namaste! I’m your HSC Study Buddy for Maharashtra Board Class 12 Science. I can help you revise Physics, Chemistry, Mathematics, Biology, and English. Choose a subject or ask me about previous-paper practice.");
+showSuggestions(["Important chapters","Make a revision plan","Explain paper pattern"]);
+</script></body></html>
