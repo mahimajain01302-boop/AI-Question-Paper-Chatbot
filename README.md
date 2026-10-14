@@ -1,21 +1,24 @@
-# HSC Study Buddy
+# HSC AI Study Buddy
 
-A simple mobile-friendly study chatbot for Maharashtra HSC Class 12 Science. It has subject buttons for Physics, Chemistry, Mathematics, Biology, and English, plus quick prompts for revision plans, important chapters, and paper pattern guidance.
+A mobile-friendly AI study chatbot for Maharashtra HSC Class 12 Science. It can help with Physics, Chemistry, Mathematics, Biology, English, revision, and questions students provide. It replies in English, Hindi, or Marathi.
 
-## Run it
+## Deploy it with Vercel
 
-Open `index.html` in a browser. No installation is needed.
+This project needs server functions, so deploy it with Vercel rather than GitHub Pages.
 
-## Publish with GitHub Pages
+1. Sign in to [Vercel](https://vercel.com/) with GitHub and import this repository.
+2. In the Vercel project, open **Settings → Environment Variables**.
+3. Add `OPENAI_API_KEY` with your own API key. Keep it private; do not add it to GitHub or share it in chat.
+4. Optionally add `OPENAI_MODEL` with a model available to your API account. If omitted, the server uses `gpt-5-mini`.
+5. Redeploy the project after setting the variables.
+6. Open the Vercel deployment URL to use the chatbot.
 
-1. Open this repository's **Settings**.
-2. Go to **Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**.
-4. Select **main** and **/(root)**, then click **Save**.
-5. Wait for GitHub Pages to publish. The site address will appear in the Pages settings.
+The API key is read by the server function in `api/chat.js`; it is never sent to the browser. OpenAI API usage may incur charges. Set usage limits in your API account and monitor usage.
 
-## Current version
+## Run locally
 
-This is a front-end starter chatbot with built-in study guidance. It does not connect to an AI model or fetch official past papers yet. To add real AI answers, connect a backend service and keep the model API key on that server—never put a private API key in `index.html`.
+The UI can be opened as a file, but the AI endpoint needs a server environment. For local development, install the Vercel CLI, set `OPENAI_API_KEY` in your local environment, then run `vercel dev`.
 
-Always confirm syllabus details and exam instructions with the latest Maharashtra State Board materials and your college.
+## Notes
+
+The chatbot answers from its model knowledge and the questions you type. It does not yet search or verify a library of official previous papers. Upload or paste a question for help, and verify syllabus details against current Maharashtra State Board materials.
